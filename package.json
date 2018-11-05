@@ -2,5 +2,8 @@
   "name": "mercari-parser",
   "version": "1.0.0",
   "description": "Mercari HTML to JSON parser",
-  "author": "Adam Gauthier"
+  "author": "Adam Gauthier",
+  "devDependencies": {
+    "eslint": "^5.8.0"
+  }
 }
