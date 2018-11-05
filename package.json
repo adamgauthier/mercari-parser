@@ -1,0 +1,6 @@
+{
+  "name": "mercari-parser",
+  "version": "1.0.0",
+  "description": "Mercari HTML to JSON parser",
+  "author": "Adam Gauthier"
+}
