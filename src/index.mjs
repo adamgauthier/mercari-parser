@@ -12,7 +12,13 @@ export class MercariItemParser {
         const id = itemPriceElement.querySelector('div.item-like-container button.item-like').getAttribute('data-id');
 
         const title = itemBodyElement.querySelector('h2').textContent;
-        const description = itemBodyElement.querySelector('div.item-description p').textContent.trim();
+
+        const descriptionElement = itemBodyElement.querySelector('div.item-description p');
+
+        const description = Array.from(descriptionElement.childNodes)
+            .filter(node => node.className !== 'read-more-button')
+            .map(n => n.textContent.trim())
+            .join('');
 
         const dateAndLocation = itemBodyElement.querySelector('div.item-date').childNodes[0].textContent;
         const matchedDateAndLocation = dateAndLocation.match(/\s+(.+)\s+•\s+(.+)\s+•\s+/);
