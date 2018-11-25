@@ -9,7 +9,10 @@ export class MercariItemParser {
         const itemBodyElement = innerItemElement.querySelector('div.item-column-right section.item-body');
         const itemPriceElement = innerItemElement.querySelector('div.item-price');
 
-        const id = itemPriceElement.querySelector('div.item-like-container button.item-like').getAttribute('data-id');
+        const id = itemBodyElement
+            .querySelector('aside.modal div.modal-inner div.modal-buttons div div.btn-default.btn-fill-blue a')
+            .getAttribute('href')
+            .match(/^https:\/\/www.mercari.com\/report\/(.+)\/$/)[1];
 
         const title = itemBodyElement.querySelector('h2').textContent;
 
