@@ -30,7 +30,7 @@ export class MercariItemParser {
 
         const price = itemPriceElement.querySelector('h3').textContent;
 
-        const imageNodes = innerItemElement.querySelectorAll('div.owl-carousel div.owl-stage-outer div.owl-stage img');
+        const imageNodes = innerItemElement.querySelectorAll('div.owl-carousel div.owl-item-inner img');
         const images = Array.from(imageNodes).map(node => node.src);
 
         const userElement = mainItemElement.querySelector('aside div.review-user-info div h3 a');
