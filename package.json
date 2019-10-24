@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Mercari HTML to JSON parser",
   "author": "Adam Gauthier",
+  "type": "module",
   "main": "./src/MercariParser.mjs",
   "devDependencies": {
     "eslint": "^6.5.1"
