@@ -4,47 +4,46 @@ export class MercariItemParser {
     }
 
     parse() {
-        const mainItemElement = this.document.querySelector('main.item-container');
-        const innerItemElement = mainItemElement.querySelector('div.item-container-inner');
-        const itemBodyElement = innerItemElement.querySelector('div.item-column-right section.item-body');
-        const itemPriceElement = innerItemElement.querySelector('div.item-price');
+        const mainContainerElement = Array.from(this.document.querySelector('div[class^=ItemDesktop__TopWrapper]').childNodes)[1];
+        const rightColumnElement = mainContainerElement.querySelector('div[class^=ItemDesktop__RightColumn]');
+        const leftColumnElement = mainContainerElement.querySelector('div[class^=ItemDesktop__LeftColumn]');
 
-        const id = itemBodyElement
-            .querySelector('aside.modal div.modal-inner div.modal-buttons div div.btn-default.btn-fill-blue a')
+        const informationSectionElements = rightColumnElement
+            .querySelectorAll('div[class^=Section] div[class^=Container] div[class^=Flex]');
+        const informationLabels = new Map(
+            Array.from(informationSectionElements)
+                .map(e => Array.from(e.querySelectorAll('p')).map(p => p.textContent))
+                .filter(a => a.length > 1)
+        );
+        const shipping = informationLabels.get('Shipping');
+        const date = informationLabels.get('Posted');
+
+        const id = leftColumnElement
+            .querySelector('a[class*=ReportLink]')
             .getAttribute('href')
-            .match(/^https:\/\/www.mercari.com\/report\/(.+)\/$/)[1];
+            .match(/^\/report\/(.+)\/$/)[1];
 
-        const title = itemBodyElement.querySelector('h2').textContent;
+        const title = rightColumnElement.querySelector('h1').textContent;
 
-        const descriptionElement = itemBodyElement.querySelector('div.item-description p');
+        const description = rightColumnElement.querySelector('p[class^=ItemDescription__DescriptionText]').textContent;
 
-        const description = Array.from(descriptionElement.childNodes)
-            .filter(node => node.className !== 'read-more-button')
-            .map(n => n.textContent.trim())
-            .join('');
+        const price = rightColumnElement.querySelector('p[class^=ItemInfo__ProductPrice]').textContent;
 
-        const dateAndLocation = itemBodyElement.querySelector('div.item-date').childNodes[0].textContent;
-        const matchedDateAndLocation = dateAndLocation.match(/\s+(.+)\s+•\s+(.+)\s+•\s+/);
-        const location = matchedDateAndLocation[1];
-        const date = matchedDateAndLocation[2];
+        const imageUrl = leftColumnElement.querySelector('div[class^=PhotoCarouselDesktop__SquareContainer] img').src;
 
-        const price = itemPriceElement.querySelector('h3').textContent;
-
-        const imageNodes = innerItemElement.querySelectorAll('div.owl-carousel div.owl-item-inner img');
-        const images = Array.from(imageNodes).map(node => node.src);
-
-        const userElement = mainItemElement.querySelector('aside div.review-user-info div h3 a');
-        const userId = userElement.getAttribute('href').match(/\/u\/(.+)\//)[1];
+        const userElement = mainContainerElement.querySelector('a[class^=MessageSeller__BoldLink]');
+        const userId = userElement.getAttribute('href').match(/\/u\/(.+)/)[1];
         const username = userElement.textContent;
 
         return {
+            version: '2',
             id,
             title,
             description,
             price,
-            location,
+            shipping,
             date,
-            images,
+            imageUrl,
             seller: {
                 userId,
                 username,
